@@ -9,10 +9,8 @@ const DEFAULT_GRAPHQL = graphql
 
 function readFile(filename) {
   return new Promise((resolve, reject) => {
-    fs.readFile(
-      filename,
-      'utf8',
-      (err, data) => (err ? reject(err) : resolve(data))
+    fs.readFile(filename, 'utf8', (err, data) =>
+      err ? reject(err) : resolve(data)
     )
   })
 }
@@ -20,9 +18,11 @@ function readFile(filename) {
 function schemaToJSON(schema, options) {
   options = options || {}
   const graphql = options.graphql || DEFAULT_GRAPHQL
-  return graphql.graphql(schema, graphql.introspectionQuery).then(result => {
-    return result.data
-  })
+  return graphql
+    .graphql(schema, graphql.getIntrospectionQuery())
+    .then(result => {
+      return result.data
+    })
 }
 
 function fetchSchemaJSON(url, options) {
